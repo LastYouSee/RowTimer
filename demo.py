@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Rowing Timer - Interactive Demo
-This script demonstrates the new individual boat controls interface.
+Skelskør Roklub - Ro Konkurrence Timer Demo
+Dette script demonstrerer det nye individuelle båd kontrolsystem.
 """
 
 import os
@@ -24,35 +24,35 @@ def create_demo_data():
     """Create demo data to showcase the interface"""
     demo_data = {
         "B001": {
-            "name": "Lightning Bolt",
+            "name": "Skælskør Stolt",
             "run1_time": 67.234,
             "run2_time": None,
             "run1_start": None,
             "run2_start": None,
         },
         "B002": {
-            "name": "Thunder Strike",
+            "name": "Storebælt Storm",
             "run1_time": None,
             "run2_time": None,
             "run1_start": None,
             "run2_start": None,
         },
         "B003": {
-            "name": "Wave Rider",
+            "name": "Vikinge Årer",
             "run1_time": 65.890,
             "run2_time": 66.123,
             "run1_start": None,
             "run2_start": None,
         },
         "B004": {
-            "name": "Storm Chaser",
+            "name": "Gammelgade Glider",
             "run1_time": None,
             "run2_time": None,
             "run1_start": None,
             "run2_start": None,
         },
         "B005": {
-            "name": "Ocean Master",
+            "name": "Dansk Drage",
             "run1_time": 70.456,
             "run2_time": None,
             "run1_start": None,
@@ -68,26 +68,26 @@ def show_demo_dialog():
     root.withdraw()
 
     message = (
-        "🚣‍♀️ ROWING TIMER DEMO 🚣‍♂️\n\n"
-        "This demo showcases the NEW Individual Boat Controls interface!\n\n"
-        "✨ KEY IMPROVEMENTS:\n"
-        "• Each boat has dedicated START/STOP/RESET buttons\n"
-        "• No more dropdown selection needed\n"
-        "• Perfect for timing multiple boats simultaneously\n"
-        "• Visual status indicators for each boat\n"
-        "• Faster operation during close race starts\n\n"
-        "📋 DEMO DATA INCLUDES:\n"
-        "• B001 Lightning Bolt (Run 1 complete)\n"
-        "• B002 Thunder Strike (ready to time)\n"
-        "• B003 Wave Rider (both runs complete)\n"
-        "• B004 Storm Chaser (ready to time)\n"
-        "• B005 Ocean Master (Run 1 complete)\n\n"
-        "🎯 TRY THESE FEATURES:\n"
-        "1. Go to Timing tab to see individual boat controls\n"
-        "2. Switch between Run 1 and Run 2 modes\n"
-        "3. Start/stop timers for different boats\n"
-        "4. Check Results tab for rankings\n\n"
-        "Ready to start the demo?"
+        "🚣‍♀️ SKELSKØR ROKLUB DEMO 🚣‍♂️\n\n"
+        "Dette demo viser det NYE individuelle båd kontrolsystem!\n\n"
+        "✨ VIGTIGSTE FORBEDRINGER:\n"
+        "• Hver båd har dedikerede START/STOP/RESET knapper\n"
+        "• Ingen dropdown menu nødvendig længere\n"
+        "• Perfekt til timing af flere både samtidig\n"
+        "• Visuelle status indikatorer for hver båd\n"
+        "• Hurtigere betjening under tætte starts\n\n"
+        "📋 DEMO DATA INKLUDERER:\n"
+        "• B001 Skælskør Stolt (Tur 1 færdig)\n"
+        "• B002 Storebælt Storm (klar til timing)\n"
+        "• B003 Vikinge Årer (begge ture færdige)\n"
+        "• B004 Gammelgade Glider (klar til timing)\n"
+        "• B005 Dansk Drage (Tur 1 færdig)\n\n"
+        "🎯 PRØV DISSE FUNKTIONER:\n"
+        "1. Gå til Tidtagning fanen for at se båd kontroller\n"
+        "2. Skift mellem Tur 1 og Tur 2 tilstande\n"
+        "3. Start/stop timere for forskellige både\n"
+        "4. Tjek Resultater fanen for placeringer\n\n"
+        "Klar til at starte demoen?"
     )
 
     result = messagebox.askyesno("Rowing Timer Demo", message)
@@ -109,16 +109,16 @@ def setup_demo_app(app):
 
         # Show helpful info
         messagebox.showinfo(
-            "Demo Ready!",
-            "🎉 Demo data loaded successfully!\n\n"
-            "📍 NEXT STEPS:\n"
-            "1. Check the Registration tab to see all boats\n"
-            "2. Go to Timing tab to see the new interface\n"
-            "3. Try timing boats B002 and B004\n"
-            "4. Complete Run 2 for boats B001 and B005\n"
-            "5. Calculate results to see rankings!\n\n"
-            "💡 TIP: You can time multiple boats simultaneously\n"
-            "by clicking different boats' START buttons!",
+            "Demo Klar!",
+            "🎉 Demo data indlæst med succes!\n\n"
+            "📍 NÆSTE TRIN:\n"
+            "1. Tjek Tilmeldinger fanen for at se alle både\n"
+            "2. Gå til Tidtagning fanen for at se det nye interface\n"
+            "3. Prøv at tage tid på både B002 og B004\n"
+            "4. Færdiggør Tur 2 for både B001 og B005\n"
+            "5. Beregn resultater for at se placeringer!\n\n"
+            "💡 TIP: Du kan tage tid på flere både samtidig\n"
+            "ved at klikke på forskellige bådes START knapper!",
         )
 
         return True
@@ -130,11 +130,11 @@ def setup_demo_app(app):
 
 def main():
     """Main demo function"""
-    print("🚣‍♀️ Starting Rowing Timer Demo...")
+    print("🚣‍♀️ Starter Skelskør Roklub Demo...")
 
     # Show introduction
     if not show_demo_dialog():
-        print("Demo cancelled by user.")
+        print("Demo afbrudt af bruger.")
         return
 
     try:
@@ -146,21 +146,21 @@ def main():
         if not setup_demo_app(app):
             return
 
-        print("✅ Demo started successfully!")
-        print("🎯 Try the new individual boat controls in the Timing tab!")
-        print("📝 Close the application window when finished.")
+        print("✅ Demo startet med succes!")
+        print("🎯 Prøv de nye individuelle båd kontroller i Tidtagning fanen!")
+        print("📝 Luk applikations vinduet når du er færdig.")
 
         # Add demo title to window
-        root.title("Rowing Timer - DEMO MODE (New Boat Controls)")
+        root.title("Skelskør Roklub - DEMO TILSTAND (Nye Båd Kontroller)")
 
         # Start the GUI
         root.mainloop()
 
     except KeyboardInterrupt:
-        print("\n⏹️ Demo interrupted by user.")
+        print("\n⏹️ Demo afbrudt af bruger.")
     except Exception as e:
-        print(f"❌ Demo error: {e}")
-        messagebox.showerror("Demo Error", f"An error occurred: {str(e)}")
+        print(f"❌ Demo fejl: {e}")
+        messagebox.showerror("Demo Fejl", f"Der opstod en fejl: {str(e)}")
 
 
 if __name__ == "__main__":

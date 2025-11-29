@@ -1,8 +1,8 @@
-# Rowing Timer - Interface Improvements
+# Skelskør Roklub - Ro Konkurrence Timer Forbedringer
 
-## 🚀 Major Improvement: Individual Boat Controls
+## 🚀 Større Forbedring: Individuelle Båd Kontroller
 
-The rowing timer application has been significantly improved to address the timing challenges during rowing events where boats start close together.
+Skelskør Roklub ro timer applikationen er blevet betydeligt forbedret for at adressere tidtagnings udfordringerne under rokonkurrencer hvor både starter tæt på hinanden.
 
 ## ❌ Previous Interface Issues
 
@@ -180,6 +180,38 @@ The new interface scales perfectly for:
   - Consistent appearance across different operating systems
 ### **Cross-Platform Reliability**: tk.Button ensures colors work on Windows, Mac, and Linux
 
+## 📊 Latest Export Enhancements
+
+### **Comprehensive Export System**
+- **Problem**: Original application only had basic CSV export with hardcoded filenames
+- **Solution**: Implemented professional dual-format export system with user file selection
+- **Benefits**: Users can now export results in multiple formats for different use cases
+
+### **CSV Export Improvements**
+- **Enhanced File Selection**: User-friendly save dialog with default timestamps
+- **Proper Encoding**: UTF-8 encoding ensures international character support
+- **Error Handling**: Graceful handling of file permission issues and user cancellation
+- **Data Integrity**: Uses Python's csv module for proper comma-separated formatting
+
+### **Professional PDF Export**
+- **Rich Formatting**: Professional layout with styled tables and headers
+- **ReportLab Integration**: Industry-standard PDF generation library
+- **Visual Design**: Alternating row colors, winner highlighting, event headers
+- **Summary Information**: Automatic generation of race statistics and winner details
+- **Dependency Management**: Graceful fallback with installation instructions if ReportLab unavailable
+
+### **Technical Implementation**
+- **File Dialog Integration**: Native OS file selection dialogs for better UX
+- **Template System**: Consistent formatting across all exported documents
+- **Error Recovery**: Comprehensive exception handling for file operations
+- **Memory Efficient**: Streams data directly to files without loading everything in memory
+
+### **User Experience Benefits**
+- **Format Choice**: CSV for data analysis, PDF for official documentation
+- **Professional Output**: Results suitable for official race documentation
+- **Easy Sharing**: Multiple formats accommodate different recipient needs
+- **Archive Ready**: Timestamped filenames prevent accidental overwrites
+
 ## 🎬 Latest Anti-Blinking Improvements
 
 ### **Eliminated Interface Blinking**
@@ -205,6 +237,50 @@ The new interface scales perfectly for:
 - **Multiple Timer Handling**: Can start/stop multiple boats rapidly without interface disruption
 - **Event Professional Quality**: Interface suitable for official racing events
 
+## 🔧 Latest Bug Fixes
+
+### **File Dialog Parameter Fix**
+- **Problem**: Export functionality failed with "bad option -initialname" error
+- **Cause**: Incorrect parameter name in tkinter filedialog.asksaveasfilename calls
+- **Solution**: Changed `initialname` to `initialfile` in both CSV and PDF export dialogs
+- **Result**: Users can now successfully export results without file dialog errors
+
+### **PDF Table Formatting Fix**
+- **Problem**: PDF table headers "Time Difference" and "Consistency Score" spilled out of their cells
+- **Cause**: Column widths were too narrow for the long header text
+- **Solution**: Shortened headers to "Difference" and "Score", adjusted column width distribution
+- **Additional**: Removed unnecessary scoring method paragraph for cleaner layout
+- **Result**: Professional PDF exports with properly fitted headers and cleaner appearance
+
+## 🚣 Latest Skelskør Roklub Branding Integration
+
+### **Complete Club Customization**
+- **Objective**: Integrate Skelskør Roklub's identity throughout the application
+- **Implementation**: Custom branding based on club website (www.skelskoerroklub.dk)
+- **Danish Language**: Full Danish interface with professional terminology
+- **Club Information**: Contact details and address integrated in exports and headers
+
+### **Visual Identity Implementation**
+- **Club Header**: Prominent blue header with club name and rowing emojis
+- **Danish Interface**: All text translated to Danish for local usability
+- **Professional Layout**: Clean, modern design suitable for official club use
+- **Contact Integration**: Club address and phone number in PDF exports
+- **Website Reference**: Links to club website in documentation
+
+### **Localized User Experience**
+- **Danish Participants**: Sample data with Danish names (Anders, Birgitte, Christian, etc.)
+- **Boat Names**: Danish-themed boat names (Skælskør Stolt, Storebælt Storm, etc.)
+- **Error Messages**: All dialogs and warnings translated to Danish
+- **Export Headers**: CSV and PDF exports use Danish column headers
+- **File Dialogs**: Danish titles for save dialogs and export functions
+
+### **Club Branding Benefits**
+- **Professional Appearance**: Official club branding for race day use
+- **Local Accessibility**: Danish language reduces barriers for club members  
+- **Official Documentation**: PDF exports suitable for club records and distribution
+- **Brand Consistency**: Matches club's website and official communications
+- **Member Engagement**: Familiar interface encourages adoption by club members
+
 ---
 
-**Summary**: The individual boat controls with reliable tk.Button styling, combined with streamlined visual feedback, popup removal, and anti-blinking targeted updates, transform the rowing timer from a basic timing tool into a professional race management system that's faster, more accurate, error-resistant, visually consistent, smooth, and suitable for events of any size.
+**Summary**: The individual boat controls with reliable tk.Button styling, combined with streamlined visual feedback, popup removal, anti-blinking targeted updates, comprehensive export capabilities, Skelskør Roklub branding integration, and robust error handling, transform the rowing timer from a basic timing tool into a professional race management system that's faster, more accurate, error-resistant, visually consistent, smooth, culturally appropriate for Danish rowing clubs, and suitable for events of any size with professional documentation output.

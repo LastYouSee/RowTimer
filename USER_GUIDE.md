@@ -90,9 +90,23 @@ Rank | Boat | Name        | Run 1    | Run 2    | Difference | Consistency Score
 
 ### 4. Exporting Results
 
-1. After calculating results, click **"Export Results"**
-2. Creates a CSV file: `rowing_results_20231201_143022.csv`
-3. Open in Excel, Google Sheets, or any spreadsheet program
+After calculating results, you have two export options:
+
+#### CSV Export (Spreadsheet Format):
+1. Click **"Export CSV"**
+2. Choose save location and filename
+3. Creates a CSV file: `rowing_results_20231201_143022.csv`
+4. Open in Excel, Google Sheets, or any spreadsheet program
+5. Contains all race data in rows and columns
+
+#### PDF Export (Professional Report):
+1. Click **"Export PDF"**
+2. Choose save location and filename  
+3. Creates a formatted PDF: `rowing_results_20231201_143022.pdf`
+4. Includes styled tables, event information, and winner highlighting
+5. Professional format suitable for official race documentation
+
+**Note:** PDF export requires ReportLab library. Install with: `pip install reportlab`
 
 ## Common Scenarios
 
@@ -168,6 +182,7 @@ Rank | Boat | Name        | Run 1    | Run 2    | Difference | Consistency Score
 - [ ] Keep spectators informed of current timings
 - [ ] Watch for boats with "RUNNING" status to avoid timing errors
 - [ ] Save/export results immediately after calculation
+- [ ] Use PDF export for official documentation, CSV for data analysis
 
 ### Best Practices
 - **Consistent Boat Numbers**: Use B001, B002, B003... format
@@ -179,13 +194,24 @@ Rank | Boat | Name        | Run 1    | Run 2    | Difference | Consistency Score
 - **Regular Saves**: Application auto-saves, but you can restart if needed
 - **Backup Results**: Export results to CSV as soon as calculated
 
-## Advanced Features
+### Advanced Features
 
 ### Multiple Simultaneous Timers
 - You can time multiple boats at once - each has independent START/STOP buttons
 - Each active timer shows separately in the Active Timers display
 - Perfect for staggered starts or when boats finish at different times
 - No limit on how many boats can be timed simultaneously
+
+### Export Options
+- **CSV Export**: Standard spreadsheet format for data analysis
+  - Import into Excel, Google Sheets, LibreOffice Calc
+  - Manipulate data, create charts, perform calculations
+  - Share data with other software systems
+- **PDF Export**: Professional formatted reports
+  - Styled tables with alternating row colors
+  - Event header with date and time
+  - Winner highlighting and summary information
+  - Perfect for official race documentation and distribution
 
 ### Data Persistence
 - All data automatically saves to `rowing_data.json`
@@ -201,6 +227,7 @@ Rank | Boat | Name        | Run 1    | Run 2    | Difference | Consistency Score
 
 The application creates these files:
 - `rowing_data.json` - Participant data (auto-created)
-- `rowing_results_YYYYMMDD_HHMMSS.csv` - Exported results
+- `rowing_results_YYYYMMDD_HHMMSS.csv` - CSV exported results
+- `rowing_results_YYYYMMDD_HHMMSS.pdf` - PDF exported results
 
 Keep these files safe for record-keeping and potential disputes!

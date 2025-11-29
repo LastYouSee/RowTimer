@@ -1,16 +1,17 @@
+import csv
 import json
 import os
 import time
 import tkinter as tk
 from datetime import datetime
-from tkinter import messagebox, ttk
+from tkinter import filedialog, messagebox, ttk
 
 
 class RowingTimer:
     def __init__(self, root):
         self.root = root
-        self.root.title("Rowing Event Timer")
-        self.root.geometry("800x600")
+        self.root.title("Skelskør Roklub - Ro Konkurrence Timer")
+        self.root.geometry("900x700")
 
         # Data storage
         self.participants = {}
@@ -28,27 +29,52 @@ class RowingTimer:
         notebook = ttk.Notebook(self.root)
         notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
+        # Add club header
+        header_frame = tk.Frame(self.root, bg="#1e3a8a", height=80)
+        header_frame.pack(fill=tk.X, pady=(0, 10))
+        header_frame.pack_propagate(False)
+
+        # Club title
+        title_label = tk.Label(
+            header_frame,
+            text="🚣 SKELSKØR ROKLUB 🚣",
+            font=("Arial", 20, "bold"),
+            fg="white",
+            bg="#1e3a8a",
+        )
+        title_label.pack(pady=15)
+
+        # Subtitle
+        subtitle_label = tk.Label(
+            header_frame,
+            text="Ro Konkurrence Timer • Gammelgade 25, 4230 Skælskør",
+            font=("Arial", 10),
+            fg="#bfdbfe",
+            bg="#1e3a8a",
+        )
+        subtitle_label.pack()
+
         # Registration Tab
         reg_frame = ttk.Frame(notebook)
-        notebook.add(reg_frame, text="Registration")
+        notebook.add(reg_frame, text="📝 Tilmeldinger")
         self.create_registration_tab(reg_frame)
 
         # Timing Tab
         timing_frame = ttk.Frame(notebook)
-        notebook.add(timing_frame, text="Timing")
+        notebook.add(timing_frame, text="⏱️ Tidtagning")
         self.create_timing_tab(timing_frame)
 
         # Results Tab
         results_frame = ttk.Frame(notebook)
-        notebook.add(results_frame, text="Results")
+        notebook.add(results_frame, text="🏆 Resultater")
         self.create_results_tab(results_frame)
 
     def create_registration_tab(self, parent):
         # Registration form
-        form_frame = ttk.LabelFrame(parent, text="Register Participant", padding=10)
+        form_frame = ttk.LabelFrame(parent, text="🚣 Tilmeld Deltager", padding=10)
         form_frame.pack(fill=tk.X, padx=10, pady=5)
 
-        ttk.Label(form_frame, text="Boat Number:").grid(
+        ttk.Label(form_frame, text="Båd Nummer:").grid(
             row=0, column=0, sticky=tk.W, pady=2
         )
         self.boat_number_var = tk.StringVar()
@@ -56,7 +82,7 @@ class RowingTimer:
             row=0, column=1, sticky=tk.W, padx=(5, 20)
         )
 
-        ttk.Label(form_frame, text="Participant Name:").grid(
+        ttk.Label(form_frame, text="Deltager Navn:").grid(
             row=0, column=2, sticky=tk.W, pady=2
         )
         self.participant_name_var = tk.StringVar()
@@ -64,16 +90,16 @@ class RowingTimer:
             row=0, column=3, sticky=tk.W, padx=5
         )
 
-        ttk.Button(form_frame, text="Register", command=self.register_participant).grid(
-            row=0, column=4, padx=10
-        )
+        ttk.Button(
+            form_frame, text="📝 Tilmeld", command=self.register_participant
+        ).grid(row=0, column=4, padx=10)
 
         # Participants list
-        list_frame = ttk.LabelFrame(parent, text="Registered Participants", padding=10)
+        list_frame = ttk.LabelFrame(parent, text="🚣 Tilmeldte Deltagere", padding=10)
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
         # Treeview for participants
-        columns = ("Boat", "Name", "Run 1", "Run 2", "Status")
+        columns = ("Båd", "Navn", "Tur 1", "Tur 2", "Status")
         self.participants_tree = ttk.Treeview(
             list_frame, columns=columns, show="headings", height=15
         )
@@ -96,47 +122,47 @@ class RowingTimer:
         button_frame.pack(fill=tk.X, padx=10, pady=5)
 
         ttk.Button(
-            button_frame, text="Remove Selected", command=self.remove_participant
+            button_frame, text="🗑️ Fjern Valgte", command=self.remove_participant
         ).pack(side=tk.LEFT, padx=5)
         ttk.Button(
-            button_frame, text="Clear All", command=self.clear_all_participants
+            button_frame, text="🧹 Ryd Alt", command=self.clear_all_participants
         ).pack(side=tk.LEFT, padx=5)
 
     def create_timing_tab(self, parent):
         # Global run selection at the top
-        run_select_frame = ttk.LabelFrame(parent, text="Current Run", padding=10)
+        run_select_frame = ttk.LabelFrame(parent, text="🏁 Nuværende Tur", padding=10)
         run_select_frame.pack(fill=tk.X, padx=10, pady=5)
 
         self.run_var = tk.StringVar(value="1")
         ttk.Label(
             run_select_frame,
-            text="Select which run to time:",
+            text="Vælg hvilken tur der skal tages tid på:",
             font=("Arial", 10, "bold"),
         ).pack(side=tk.LEFT, padx=5)
         ttk.Radiobutton(
             run_select_frame,
-            text="Run 1",
+            text="🥇 Tur 1",
             variable=self.run_var,
             value="1",
             command=self.update_all_boat_controls_for_run_change,
         ).pack(side=tk.LEFT, padx=10)
         ttk.Radiobutton(
             run_select_frame,
-            text="Run 2",
+            text="🥈 Tur 2",
             variable=self.run_var,
             value="2",
             command=self.update_all_boat_controls_for_run_change,
         ).pack(side=tk.LEFT, padx=10)
 
         # Active timers display
-        active_frame = ttk.LabelFrame(parent, text="Active Timers", padding=10)
+        active_frame = ttk.LabelFrame(parent, text="⏱️ Aktive Timere", padding=10)
         active_frame.pack(fill=tk.X, padx=10, pady=5)
         self.timer_display_frame = ttk.Frame(active_frame)
         self.timer_display_frame.pack(fill=tk.X)
 
         # Boat controls section
         self.boat_controls_frame = ttk.LabelFrame(
-            parent, text="Boat Controls", padding=10
+            parent, text="🚣 Båd Kontroller", padding=10
         )
         self.boat_controls_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
@@ -178,18 +204,20 @@ class RowingTimer:
 
     def create_results_tab(self, parent):
         # Results display
-        results_frame = ttk.LabelFrame(parent, text="Race Results", padding=10)
+        results_frame = ttk.LabelFrame(
+            parent, text="🏆 Konkurrence Resultater", padding=10
+        )
         results_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
         # Results treeview
         columns = (
-            "Rank",
-            "Boat",
-            "Name",
-            "Run 1",
-            "Run 2",
-            "Difference",
-            "Consistency Score",
+            "Plads",
+            "Båd",
+            "Navn",
+            "Tur 1",
+            "Tur 2",
+            "Forskel",
+            "Konsistens Score",
         )
         self.results_tree = ttk.Treeview(
             results_frame, columns=columns, show="headings", height=20
@@ -214,11 +242,14 @@ class RowingTimer:
 
         ttk.Button(
             results_button_frame,
-            text="Calculate Results",
+            text="🧮 Beregn Resultater",
             command=self.calculate_results,
         ).pack(side=tk.LEFT, padx=5)
         ttk.Button(
-            results_button_frame, text="Export Results", command=self.export_results
+            results_button_frame, text="📊 Eksporter CSV", command=self.export_csv
+        ).pack(side=tk.LEFT, padx=5)
+        ttk.Button(
+            results_button_frame, text="📄 Eksporter PDF", command=self.export_pdf
         ).pack(side=tk.LEFT, padx=5)
 
     def register_participant(self):
@@ -227,12 +258,12 @@ class RowingTimer:
 
         if not boat_number or not name:
             messagebox.showerror(
-                "Error", "Please enter both boat number and participant name."
+                "Fejl", "Indtast venligst både båd nummer og deltager navn."
             )
             return
 
         if boat_number in self.participants:
-            messagebox.showerror("Error", f"Boat {boat_number} is already registered.")
+            messagebox.showerror("Fejl", f"Båd {boat_number} er allerede tilmeldt.")
             return
 
         # Add participant
@@ -256,13 +287,13 @@ class RowingTimer:
     def remove_participant(self):
         selection = self.participants_tree.selection()
         if not selection:
-            messagebox.showwarning("Warning", "Please select a participant to remove.")
+            messagebox.showwarning("Advarsel", "Vælg venligst en deltager at fjerne.")
             return
 
         item = self.participants_tree.item(selection[0])
         boat_number = item["values"][0]
 
-        if messagebox.askyesno("Confirm", f"Remove boat {boat_number}?"):
+        if messagebox.askyesno("Bekræft", f"Fjern båd {boat_number}?"):
             del self.participants[boat_number]
             self.update_participants_display()
             self.update_boat_controls()
@@ -270,7 +301,7 @@ class RowingTimer:
 
     def clear_all_participants(self):
         if messagebox.askyesno(
-            "Confirm", "Clear all participants? This will delete all data."
+            "Bekræft", "Ryd alle deltagere? Dette vil slette alle data."
         ):
             self.participants.clear()
             self.current_timers.clear()
@@ -286,18 +317,18 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Error", "No boat specified.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.")
             return
 
         if boat not in self.participants:
-            messagebox.showerror("Error", "Selected boat is not registered.")
+            messagebox.showerror("Fejl", "Valgte båd er ikke tilmeldt.")
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key in self.current_timers:
             messagebox.showwarning(
-                "Warning", f"Timer for Boat {boat} Run {run} is already running."
+                "Advarsel", f"Timer for Båd {boat} Tur {run} kører allerede."
             )
             return
 
@@ -305,8 +336,8 @@ class RowingTimer:
         run_key = f"run{run}_time"
         if self.participants[boat][run_key] is not None:
             if not messagebox.askyesno(
-                "Confirm",
-                f"Boat {boat} Run {run} already has a time. Start new timing?",
+                "Bekræft",
+                f"Båd {boat} Tur {run} har allerede en tid. Start ny tidtagning?",
             ):
                 return
 
@@ -333,14 +364,14 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Error", "No boat specified.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.")
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key not in self.current_timers:
             messagebox.showwarning(
-                "Warning", f"No active timer for Boat {boat} Run {run}."
+                "Advarsel", f"Ingen aktiv timer for Båd {boat} Tur {run}."
             )
             return
 
@@ -392,14 +423,14 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Error", "No boat specified.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.")
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key in self.current_timers:
             if messagebox.askyesno(
-                "Confirm", f"Reset active timer for Boat {boat} Run {run}?"
+                "Bekræft", f"Nulstil aktiv timer for Båd {boat} Tur {run}?"
             ):
                 del self.current_timers[timer_key]
                 self.participants[boat][f"run{run}_time"] = None
@@ -409,7 +440,7 @@ class RowingTimer:
                 self.update_single_boat_controls(boat)
         else:
             if messagebox.askyesno(
-                "Confirm", f"Clear saved time for Boat {boat} Run {run}?"
+                "Bekræft", f"Ryd gemt tid for Båd {boat} Tur {run}?"
             ):
                 self.participants[boat][f"run{run}_time"] = None
                 self.participants[boat][f"run{run}_start"] = None
@@ -423,7 +454,7 @@ class RowingTimer:
 
         if not self.current_timers:
             ttk.Label(
-                self.timer_display_frame, text="No active timers", font=("Arial", 12)
+                self.timer_display_frame, text="Ingen aktive timere", font=("Arial", 12)
             ).pack()
             return
 
@@ -436,7 +467,7 @@ class RowingTimer:
             run = timer_data["run"]
 
             ttk.Label(
-                frame, text=f"Boat {boat} Run {run}:", font=("Arial", 10, "bold")
+                frame, text=f"Båd {boat} Tur {run}:", font=("Arial", 10, "bold")
             ).pack(side=tk.LEFT)
 
             timer_label = ttk.Label(
@@ -474,11 +505,11 @@ class RowingTimer:
             )
 
             # Determine status
-            status = "Registered"
+            status = "Tilmeldt"
             if data["run1_time"] and data["run2_time"]:
-                status = "Complete"
+                status = "Færdig"
             elif data["run1_time"] or data["run2_time"]:
-                status = "Partial"
+                status = "Delvis"
 
             self.participants_tree.insert(
                 "",
@@ -495,7 +526,7 @@ class RowingTimer:
         if not self.participants:
             ttk.Label(
                 self.boat_controls_inner_frame,
-                text="No registered participants. Go to Registration tab to add boats.",
+                text="Ingen tilmeldte deltagere. Gå til Tilmeldinger for at tilføje både.",
                 font=("Arial", 10),
             ).pack(pady=20)
             return
@@ -507,20 +538,20 @@ class RowingTimer:
         header_frame = ttk.Frame(self.boat_controls_inner_frame)
         header_frame.pack(fill=tk.X, pady=5)
 
-        ttk.Label(header_frame, text="Boat", font=("Arial", 10, "bold"), width=8).grid(
+        ttk.Label(header_frame, text="Båd", font=("Arial", 10, "bold"), width=8).grid(
             row=0, column=0
         )
-        ttk.Label(header_frame, text="Name", font=("Arial", 10, "bold"), width=20).grid(
+        ttk.Label(header_frame, text="Navn", font=("Arial", 10, "bold"), width=20).grid(
             row=0, column=1
         )
         ttk.Label(
             header_frame, text="Status", font=("Arial", 10, "bold"), width=18
         ).grid(row=0, column=2)
         ttk.Label(
-            header_frame, text="Current Time", font=("Arial", 10, "bold"), width=12
+            header_frame, text="Nuværende Tid", font=("Arial", 10, "bold"), width=12
         ).grid(row=0, column=3)
         ttk.Label(
-            header_frame, text="Controls", font=("Arial", 10, "bold"), width=25
+            header_frame, text="Kontroller", font=("Arial", 10, "bold"), width=25
         ).grid(row=0, column=4)
 
         # Separator
@@ -619,19 +650,19 @@ class RowingTimer:
 
         # Update status and time display
         if timer_key in self.current_timers:
-            status_text = f"RUNNING Run {run}"
+            status_text = f"🏃 KØRER Tur {run}"
             status_color = "red"
             status_font = ("Arial", 9, "bold")
-            current_time = "TIMING..."
+            current_time = "TIDTAGER..."
             time_color = "red"
         elif data.get(run_key) is not None:
-            status_text = f"✓ Run {run}: {self.format_time(data[run_key])}"
+            status_text = f"✓ Tur {run}: {self.format_time(data[run_key])}"
             status_color = "green"
             status_font = ("Arial", 9, "bold")
             current_time = self.format_time(data[run_key])
             time_color = "green"
         else:
-            status_text = f"Run {run} Ready"
+            status_text = f"🏁 Tur {run} Klar"
             status_color = "blue"
             status_font = ("Arial", 9, "normal")
             current_time = "-"
@@ -755,34 +786,272 @@ class RowingTimer:
 
         if results:
             messagebox.showinfo(
-                "Results",
-                f"Results calculated for {len(results)} completed participants.",
+                "Resultater",
+                f"Resultater beregnet for {len(results)} færdige deltagere.",
             )
         else:
             messagebox.showwarning(
-                "No Results", "No participants have completed both runs."
+                "Ingen Resultater", "Ingen deltagere har gennemført begge ture."
             )
 
-    def export_results(self):
+    def export_csv(self):
+        """Export results to CSV file with user-selected filename"""
         if not self.results_tree.get_children():
-            messagebox.showwarning("No Results", "Please calculate results first.")
+            messagebox.showwarning(
+                "Ingen Resultater", "Beregn venligst resultater først."
+            )
             return
 
         try:
-            filename = f"rowing_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-            with open(filename, "w") as f:
+            # Ask user for save location
+            default_filename = (
+                f"rowing_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            )
+            filename = filedialog.asksaveasfilename(
+                defaultextension=".csv",
+                filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+                initialfile=default_filename,
+                title="Gem Resultater som CSV",
+            )
+
+            if not filename:  # User cancelled
+                return
+
+            with open(filename, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+
                 # Header
-                f.write("Rank,Boat,Name,Run 1,Run 2,Difference,Consistency Score\n")
+                writer.writerow(
+                    [
+                        "Plads",
+                        "Båd",
+                        "Navn",
+                        "Tur 1",
+                        "Tur 2",
+                        "Forskel",
+                        "Konsistens Score",
+                    ]
+                )
 
                 # Data
                 for item in self.results_tree.get_children():
                     values = self.results_tree.item(item)["values"]
-                    f.write(",".join(str(v) for v in values) + "\n")
+                    writer.writerow(values)
 
-            messagebox.showinfo("Export Complete", f"Results exported to {filename}")
+            messagebox.showinfo(
+                "CSV Eksport Færdig", f"Resultater eksporteret til:\n{filename}"
+            )
 
         except Exception as e:
-            messagebox.showerror("Export Error", f"Failed to export results: {str(e)}")
+            messagebox.showerror(
+                "CSV Eksport Fejl", f"Kunne ikke eksportere CSV: {str(e)}"
+            )
+
+    def export_pdf(self):
+        """Export results to PDF file with formatted layout"""
+        if not self.results_tree.get_children():
+            messagebox.showwarning(
+                "Ingen Resultater", "Beregn venligst resultater først."
+            )
+            return
+
+        try:
+            # Try to import reportlab
+            try:
+                from reportlab.lib import colors
+                from reportlab.lib.enums import TA_CENTER, TA_LEFT
+                from reportlab.lib.pagesizes import A4, letter
+                from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+                from reportlab.lib.units import inch
+                from reportlab.platypus import (
+                    Paragraph,
+                    SimpleDocTemplate,
+                    Spacer,
+                    Table,
+                    TableStyle,
+                )
+            except ImportError:
+                messagebox.showerror(
+                    "PDF Eksport Fejl",
+                    "PDF eksport kræver 'reportlab' biblioteket.\n\n"
+                    + "Installer det med:\n"
+                    + "pip install reportlab\n\n"
+                    + "Brug i stedet CSV eksport indtil da.",
+                )
+                return
+
+            # Ask user for save location
+            default_filename = (
+                f"rowing_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+            )
+            filename = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
+                initialfile=default_filename,
+                title="Gem Resultater som PDF",
+            )
+
+            if not filename:  # User cancelled
+                return
+
+            # Create PDF document
+            doc = SimpleDocTemplate(
+                filename,
+                pagesize=A4,
+                rightMargin=72,
+                leftMargin=72,
+                topMargin=72,
+                bottomMargin=18,
+            )
+
+            # Container for the 'Flowable' objects
+            elements = []
+
+            # Get styles
+            styles = getSampleStyleSheet()
+            title_style = ParagraphStyle(
+                "CustomTitle",
+                parent=styles["Heading1"],
+                fontSize=24,
+                spaceAfter=30,
+                alignment=TA_CENTER,
+                textColor=colors.HexColor("#2E4057"),
+            )
+
+            subtitle_style = ParagraphStyle(
+                "CustomSubtitle",
+                parent=styles["Normal"],
+                fontSize=12,
+                spaceAfter=20,
+                alignment=TA_CENTER,
+                textColor=colors.HexColor("#666666"),
+            )
+
+            # Club header with logo placeholder
+            club_header = Paragraph("🚣 SKELSKØR ROKLUB 🚣", title_style)
+            elements.append(club_header)
+
+            # Title
+            title_text = "Ro Konkurrence Resultater"
+            title = Paragraph(title_text, title_style)
+            elements.append(title)
+
+            # Event details
+            event_info = (
+                f"Genereret den {datetime.now().strftime('%d. %B %Y kl. %H:%M')}<br/>"
+                f"Gammelgade 25, 4230 Skælskør • www.skelskoerroklub.dk"
+            )
+            subtitle = Paragraph(event_info, subtitle_style)
+            elements.append(subtitle)
+            elements.append(Spacer(1, 20))
+
+            # Prepare table data
+            table_data = [
+                [
+                    "Plads",
+                    "Båd",
+                    "Deltager Navn",
+                    "Tur 1",
+                    "Tur 2",
+                    "Forskel",
+                    "Score",
+                ]
+            ]
+
+            for item in self.results_tree.get_children():
+                values = self.results_tree.item(item)["values"]
+                table_data.append(values)
+
+            # Create table
+            table = Table(
+                table_data,
+                colWidths=[
+                    0.6 * inch,
+                    0.7 * inch,
+                    2.0 * inch,
+                    0.9 * inch,
+                    0.9 * inch,
+                    0.9 * inch,
+                    0.8 * inch,
+                ],
+            )
+
+            # Table styling
+            table.setStyle(
+                TableStyle(
+                    [
+                        # Header row
+                        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2E4057")),
+                        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                        ("FONTSIZE", (0, 0), (-1, 0), 12),
+                        ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+                        # Data rows
+                        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+                        ("FONTSIZE", (0, 1), (-1, -1), 10),
+                        (
+                            "ROWBACKGROUNDS",
+                            (0, 1),
+                            (-1, -1),
+                            [colors.beige, colors.white],
+                        ),
+                        ("ALIGN", (0, 1), (0, -1), "CENTER"),  # Rank column
+                        ("ALIGN", (1, 1), (1, -1), "CENTER"),  # Boat column
+                        ("ALIGN", (2, 1), (2, -1), "LEFT"),  # Name column
+                        ("ALIGN", (3, 1), (-1, -1), "CENTER"),  # Time columns
+                        # Grid
+                        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                        # Special styling for winner
+                        ("BACKGROUND", (0, 1), (-1, 1), colors.HexColor("#FFD700")),
+                        ("FONTNAME", (0, 1), (-1, 1), "Helvetica-Bold"),
+                    ]
+                )
+            )
+
+            elements.append(table)
+            elements.append(Spacer(1, 30))
+
+            # Add summary information
+            total_participants = len(table_data) - 1
+            if total_participants > 0:
+                winner_data = table_data[1]  # First data row after header
+                winner_name = winner_data[2]
+                winner_consistency = winner_data[6]
+
+                summary_style = ParagraphStyle(
+                    "Summary",
+                    parent=styles["Normal"],
+                    fontSize=11,
+                    spaceAfter=10,
+                    alignment=TA_LEFT,
+                )
+
+                summary_text = [
+                    f"<b>Konkurrence Sammendrag:</b>",
+                    f"• Antal Deltagere: {total_participants}",
+                    f"• Vinder: {winner_name} (Mest Konsistent)",
+                    f"• Vinder Konsistens Score: {winner_consistency}",
+                ]
+
+                for text in summary_text:
+                    if text:
+                        elements.append(Paragraph(text, summary_style))
+                    else:
+                        elements.append(Spacer(1, 6))
+
+            # Build PDF
+            doc.build(elements)
+
+            messagebox.showinfo(
+                "PDF Eksport Færdig", f"Resultater eksporteret til:\n{filename}"
+            )
+
+        except Exception as e:
+            messagebox.showerror(
+                "PDF Eksport Fejl", f"Kunne ikke eksportere PDF: {str(e)}"
+            )
 
     def format_time(self, seconds):
         if seconds is None:

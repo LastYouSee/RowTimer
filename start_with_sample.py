@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Rowing Timer Application with Sample Data
-This script starts the rowing timer application and optionally loads sample data for demonstration.
+Skelskør Roklub - Ro Konkurrence Timer med Eksempel Data
+Dette script starter ro timer applikationen og indlæser valgfrit eksempel data til demonstration.
 """
 
 import json
@@ -22,52 +22,52 @@ except ImportError as e:
 
 
 def create_sample_data():
-    """Create sample data for demonstration purposes"""
+    """Opret eksempel data til demonstrations formål"""
     sample_data = {
         "B001": {
-            "name": "Alice Johnson",
+            "name": "Anders Sørensen",
             "run1_time": 65.234,
             "run2_time": 65.890,
             "run1_start": None,
             "run2_start": None,
         },
         "B002": {
-            "name": "Bob Smith",
+            "name": "Birgitte Hansen",
             "run1_time": 62.123,
             "run2_time": 63.456,
             "run1_start": None,
             "run2_start": None,
         },
         "B003": {
-            "name": "Carol Davis",
+            "name": "Christian Madsen",
             "run1_time": 68.567,
             "run2_time": 68.234,
             "run1_start": None,
             "run2_start": None,
         },
         "B004": {
-            "name": "David Wilson",
+            "name": "Dorthe Nielsen",
             "run1_time": 61.789,
             "run2_time": 64.123,
             "run1_start": None,
             "run2_start": None,
         },
         "B005": {
-            "name": "Emma Brown",
+            "name": "Erik Petersen",
             "run1_time": 70.111,
             "run2_time": 70.222,
             "run1_start": None,
             "run2_start": None,
         },
         "B006": {
-            "name": "Frank Miller",
+            "name": "Freja Andersen",
             "run1_time": 59.876,
             "run2_time": None,
             "run1_start": None,
             "run2_start": None,
         },
         "B007": {
-            "name": "Grace Taylor",
+            "name": "Gustav Larsen",
             "run1_time": None,
             "run2_time": None,
             "run1_start": None,
@@ -78,38 +78,38 @@ def create_sample_data():
 
 
 def show_welcome_dialog():
-    """Show welcome dialog with option to load sample data"""
+    """Vis velkomst dialog med mulighed for at indlæse eksempel data"""
     root = tk.Tk()
-    root.withdraw()  # Hide the main window temporarily
+    root.withdraw()  # Skjul hovedvinduet midlertidigt
 
-    # Check if data file exists
+    # Tjek om data fil eksisterer
     data_file = "rowing_data.json"
     has_existing_data = os.path.exists(data_file) and os.path.getsize(data_file) > 0
 
     if has_existing_data:
         message = (
-            "Welcome to the Rowing Event Timer!\n\n"
-            "Existing data found. The application will load your previous session.\n\n"
-            "Click OK to continue with existing data, or Cancel to exit."
+            "Velkommen til Skelskør Roklub Ro Timer!\n\n"
+            "Eksisterende data fundet. Applikationen vil indlæse din forrige session.\n\n"
+            "Klik OK for at fortsætte med eksisterende data, eller Annuller for at afslutte."
         )
 
-        result = messagebox.askokcancel("Rowing Timer - Existing Data", message)
+        result = messagebox.askokcancel("Skelskør Roklub - Eksisterende Data", message)
         root.destroy()
         return result, False
     else:
         message = (
-            "Welcome to the Rowing Event Timer!\n\n"
-            "This appears to be your first time running the application.\n\n"
-            "Would you like to load sample data for demonstration purposes?\n\n"
-            "Sample data includes:\n"
-            "• 7 registered participants\n"
-            "• 5 with completed times (both runs)\n"
-            "• 1 with partial data (one run only)\n"
-            "• 1 with no times recorded\n\n"
-            "Choose 'Yes' for sample data, 'No' for empty start, or 'Cancel' to exit."
+            "Velkommen til Skelskør Roklub Ro Timer!\n\n"
+            "Det ser ud til at være første gang du kører applikationen.\n\n"
+            "Vil du indlæse eksempel data til demonstrations formål?\n\n"
+            "Eksempel data inkluderer:\n"
+            "• 7 tilmeldte deltagere\n"
+            "• 5 med færdige tider (begge ture)\n"
+            "• 1 med delvis data (kun én tur)\n"
+            "• 1 uden registrerede tider\n\n"
+            "Vælg 'Ja' for eksempel data, 'Nej' for tom start, eller 'Annuller' for at afslutte."
         )
 
-        result = messagebox.askyesnocancel("Rowing Timer - First Run", message)
+        result = messagebox.askyesnocancel("Skelskør Roklub - Første Kørsel", message)
         root.destroy()
 
         if result is None:  # Cancel
@@ -121,7 +121,7 @@ def show_welcome_dialog():
 
 
 def load_sample_data(app):
-    """Load sample data into the application"""
+    """Indlæs eksempel data i applikationen"""
     try:
         sample_data = create_sample_data()
         app.participants.update(sample_data)
@@ -129,57 +129,57 @@ def load_sample_data(app):
         app.update_participants_display()
         app.update_boat_controls()
 
-        # Show info about loaded data
+        # Vis info om indlæste data
         messagebox.showinfo(
-            "Sample Data Loaded",
-            "Sample data has been loaded!\n\n"
-            "Check the Registration tab to see participants.\n"
-            "Go to Results tab and click 'Calculate Results' to see rankings.\n\n"
-            "You can now experiment with the timing features!",
+            "Eksempel Data Indlæst",
+            "Eksempel data er blevet indlæst!\n\n"
+            "Tjek Tilmeldinger fanen for at se deltagere.\n"
+            "Gå til Resultater fanen og klik 'Beregn Resultater' for at se placeringer.\n\n"
+            "Du kan nu eksperimentere med tidtagnings funktionerne!",
         )
         return True
 
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to load sample data: {str(e)}")
+        messagebox.showerror("Fejl", f"Kunne ikke indlæse eksempel data: {str(e)}")
         return False
 
 
 def main():
-    """Main function to start the application"""
-    print("Starting Rowing Timer Application...")
+    """Hoved funktion til at starte applikationen"""
+    print("Starter Skelskør Roklub Timer Applikation...")
 
-    # Show welcome dialog
+    # Vis velkomst dialog
     should_continue, load_sample = show_welcome_dialog()
 
     if not should_continue:
-        print("Application cancelled by user.")
+        print("Applikation afbrudt af bruger.")
         return
 
     try:
-        # Create the main application
+        # Opret hoved applikationen
         root = tk.Tk()
         app = RowingTimer(root)
 
-        # Load sample data if requested
+        # Indlæs eksempel data hvis ønsket
         if load_sample:
-            print("Loading sample data...")
+            print("Indlæser eksempel data...")
             load_sample_data(app)
 
-        # Update displays initially
+        # Opdater visninger indledningsvist
         app.update_participants_display()
         app.update_boat_controls()
 
-        print("Application started successfully!")
-        print("Close the application window to exit.")
+        print("Applikation startet med succes!")
+        print("Luk applikations vinduet for at afslutte.")
 
-        # Start the GUI event loop
+        # Start GUI event loop
         root.mainloop()
 
     except KeyboardInterrupt:
-        print("\nApplication interrupted by user.")
+        print("\nApplikation afbrudt af bruger.")
     except Exception as e:
-        print(f"Error running application: {e}")
-        messagebox.showerror("Application Error", f"An error occurred: {str(e)}")
+        print(f"Fejl ved kørsel af applikation: {e}")
+        messagebox.showerror("Applikations Fejl", f"Der opstod en fejl: {str(e)}")
 
 
 if __name__ == "__main__":
