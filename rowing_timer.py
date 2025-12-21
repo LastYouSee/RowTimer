@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import sys
 import time
 import tkinter as tk
 from datetime import datetime
@@ -34,25 +35,51 @@ class RowingTimer:
         header_frame.pack(fill=tk.X, pady=(0, 10))
         header_frame.pack_propagate(False)
 
+        # Club header content frame (centered)
+        content_frame = tk.Frame(header_frame, bg="#1e3a8a")
+        content_frame.pack(expand=True)
+
+        # Try to load logo
+        try:
+            # Check for local file or PyInstaller bundled file
+            logo_path = "club_logo.png"
+            if hasattr(sys, "_MEIPASS"):
+                logo_path = os.path.join(sys._MEIPASS, "club_logo.png")
+            
+            if os.path.exists(logo_path):
+                self.logo_img = tk.PhotoImage(file=logo_path)
+                logo_label = tk.Label(
+                    content_frame, 
+                    image=self.logo_img, 
+                    bg="#1e3a8a"
+                )
+                logo_label.pack(side=tk.LEFT, padx=20)
+        except Exception as e:
+            print(f"Could not load logo: {e}")
+
+        # Text frame
+        text_frame = tk.Frame(content_frame, bg="#1e3a8a")
+        text_frame.pack(side=tk.LEFT)
+
         # Club title
         title_label = tk.Label(
-            header_frame,
+            text_frame,
             text="🚣 SKELSKØR ROKLUB 🚣",
             font=("Arial", 20, "bold"),
             fg="white",
             bg="#1e3a8a",
         )
-        title_label.pack(pady=15)
+        title_label.pack(pady=(5, 0))
 
         # Subtitle
         subtitle_label = tk.Label(
-            header_frame,
+            text_frame,
             text="Ro Konkurrence Timer • Gammelgade 25, 4230 Skælskør",
             font=("Arial", 10),
             fg="#bfdbfe",
             bg="#1e3a8a",
         )
-        subtitle_label.pack()
+        subtitle_label.pack(pady=(0, 5))
 
         # Registration Tab
         reg_frame = ttk.Frame(notebook)
@@ -154,12 +181,6 @@ class RowingTimer:
             command=self.update_all_boat_controls_for_run_change,
         ).pack(side=tk.LEFT, padx=10)
 
-        # Active timers display
-        active_frame = ttk.LabelFrame(parent, text="⏱️ Aktive Timere", padding=10)
-        active_frame.pack(fill=tk.X, padx=10, pady=5)
-        self.timer_display_frame = ttk.Frame(active_frame)
-        self.timer_display_frame.pack(fill=tk.X)
-
         # Boat controls section
         self.boat_controls_frame = ttk.LabelFrame(
             parent, text="🚣 Båd Kontroller", padding=10
@@ -199,7 +220,6 @@ class RowingTimer:
         self.boat_control_widgets = {}
 
         # Update displays
-        self.update_timer_displays()
         self.update_boat_controls()
 
     def create_results_tab(self, parent):
@@ -258,12 +278,18 @@ class RowingTimer:
 
         if not boat_number or not name:
             messagebox.showerror(
-                "Fejl", "Indtast venligst både båd nummer og deltager navn."
+                "Fejl", 
+                "Indtast venligst både båd nummer og deltager navn.",
+                parent=self.root
             )
             return
 
         if boat_number in self.participants:
-            messagebox.showerror("Fejl", f"Båd {boat_number} er allerede tilmeldt.")
+            messagebox.showerror(
+                "Fejl", 
+                f"Båd {boat_number} er allerede tilmeldt.",
+                parent=self.root
+            )
             return
 
         # Add participant
@@ -287,13 +313,21 @@ class RowingTimer:
     def remove_participant(self):
         selection = self.participants_tree.selection()
         if not selection:
-            messagebox.showwarning("Advarsel", "Vælg venligst en deltager at fjerne.")
+            messagebox.showwarning(
+                "Advarsel", 
+                "Vælg venligst en deltager at fjerne.",
+                parent=self.root
+            )
             return
 
         item = self.participants_tree.item(selection[0])
-        boat_number = item["values"][0]
+        boat_number = str(item["values"][0])
 
-        if messagebox.askyesno("Bekræft", f"Fjern båd {boat_number}?"):
+        if messagebox.askyesno(
+            "Bekræft", 
+            f"Fjern båd {boat_number}?",
+            parent=self.root
+        ):
             del self.participants[boat_number]
             self.update_participants_display()
             self.update_boat_controls()
@@ -301,14 +335,22 @@ class RowingTimer:
 
     def clear_all_participants(self):
         if messagebox.askyesno(
-            "Bekræft", "Ryd alle deltagere? Dette vil slette alle data."
+            "Bekræft", 
+            "Ryd alle deltagere? Dette vil slette alle data.",
+            parent=self.root
         ):
-            self.participants.clear()
-            self.current_timers.clear()
-            self.update_participants_display()
-            self.update_boat_controls()
-            self.update_timer_displays()
-            self.save_data()
+            try:
+                self.participants.clear()
+                self.current_timers.clear()
+                self.update_participants_display()
+                self.update_boat_controls()
+                self.save_data()
+            except Exception as e:
+                messagebox.showerror(
+                    "Fejl", 
+                    f"Kunne ikke rydde deltagere: {e}",
+                    parent=self.root
+                )
 
     def start_timer(self, boat=None):
         if boat is None:
@@ -317,18 +359,20 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Fejl", "Ingen båd specificeret.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.", parent=self.root)
             return
 
         if boat not in self.participants:
-            messagebox.showerror("Fejl", "Valgte båd er ikke tilmeldt.")
+            messagebox.showerror("Fejl", "Valgte båd er ikke tilmeldt.", parent=self.root)
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key in self.current_timers:
             messagebox.showwarning(
-                "Advarsel", f"Timer for Båd {boat} Tur {run} kører allerede."
+                "Advarsel", 
+                f"Timer for Båd {boat} Tur {run} kører allerede.",
+                parent=self.root
             )
             return
 
@@ -338,6 +382,7 @@ class RowingTimer:
             if not messagebox.askyesno(
                 "Bekræft",
                 f"Båd {boat} Tur {run} har allerede en tid. Start ny tidtagning?",
+                parent=self.root
             ):
                 return
 
@@ -353,9 +398,12 @@ class RowingTimer:
         self.participants[boat][f"run{run}_start"] = start_time
         self.participants[boat][f"run{run}_time"] = None
 
-        self.update_timer_displays()
         self.update_participants_display()
         self.update_single_boat_controls(boat)
+
+        # Start update loop if this is the first timer
+        if len(self.current_timers) == 1:
+            self.update_running_timers()
 
     def stop_timer(self, boat=None):
         if boat is None:
@@ -364,14 +412,16 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Fejl", "Ingen båd specificeret.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.", parent=self.root)
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key not in self.current_timers:
             messagebox.showwarning(
-                "Advarsel", f"Ingen aktiv timer for Båd {boat} Tur {run}."
+                "Advarsel", 
+                f"Ingen aktiv timer for Båd {boat} Tur {run}.",
+                parent=self.root
             )
             return
 
@@ -386,7 +436,6 @@ class RowingTimer:
         # Remove from active timers
         del self.current_timers[timer_key]
 
-        self.update_timer_displays()
         self.update_participants_display()
         self.update_single_boat_controls(boat)
         self.save_data()
@@ -423,72 +472,51 @@ class RowingTimer:
         run = self.run_var.get()
 
         if not boat:
-            messagebox.showerror("Fejl", "Ingen båd specificeret.")
+            messagebox.showerror("Fejl", "Ingen båd specificeret.", parent=self.root)
             return
 
         timer_key = f"{boat}_run{run}"
 
         if timer_key in self.current_timers:
             if messagebox.askyesno(
-                "Bekræft", f"Nulstil aktiv timer for Båd {boat} Tur {run}?"
+                "Bekræft", 
+                f"Nulstil aktiv timer for Båd {boat} Tur {run}?",
+                parent=self.root
             ):
                 del self.current_timers[timer_key]
                 self.participants[boat][f"run{run}_time"] = None
                 self.participants[boat][f"run{run}_start"] = None
-                self.update_timer_displays()
                 self.update_participants_display()
                 self.update_single_boat_controls(boat)
         else:
             if messagebox.askyesno(
-                "Bekræft", f"Ryd gemt tid for Båd {boat} Tur {run}?"
+                "Bekræft", 
+                f"Ryd gemt tid for Båd {boat} Tur {run}?",
+                parent=self.root
             ):
                 self.participants[boat][f"run{run}_time"] = None
                 self.participants[boat][f"run{run}_start"] = None
                 self.update_participants_display()
                 self.update_single_boat_controls(boat)
 
-    def update_timer_displays(self):
-        # Clear existing displays
-        for widget in self.timer_display_frame.winfo_children():
-            widget.destroy()
-
-        if not self.current_timers:
-            ttk.Label(
-                self.timer_display_frame, text="Ingen aktive timere", font=("Arial", 12)
-            ).pack()
-            return
-
-        # Create displays for active timers
-        for timer_key, timer_data in self.current_timers.items():
-            frame = ttk.Frame(self.timer_display_frame)
-            frame.pack(fill=tk.X, pady=2)
-
-            boat = timer_data["boat"]
-            run = timer_data["run"]
-
-            ttk.Label(
-                frame, text=f"Båd {boat} Tur {run}:", font=("Arial", 10, "bold")
-            ).pack(side=tk.LEFT)
-
-            timer_label = ttk.Label(
-                frame, text="00:00.00", font=("Arial", 12), foreground="red"
-            )
-            timer_label.pack(side=tk.LEFT, padx=10)
-
-            # Store reference for updating
-            timer_data["label"] = timer_label
-
-        # Schedule update
-        self.root.after(10, self.update_running_timers)
-
     def update_running_timers(self):
+        """Update the time display for all running timers"""
+        run = self.run_var.get()
+        
         for timer_key, timer_data in self.current_timers.items():
-            if "label" in timer_data:
+            boat = timer_data["boat"]
+            # Only update if the timer belongs to the current run view
+            if timer_data["run"] == run and boat in self.boat_control_widgets:
                 elapsed = time.time() - timer_data["start_time"]
-                timer_data["label"].config(text=self.format_time(elapsed))
+                time_str = self.format_time(elapsed)
+                
+                # Update the label in the boat control row
+                self.boat_control_widgets[boat]["time_label"].config(
+                    text=time_str, foreground="red"
+                )
 
         if self.current_timers:
-            self.root.after(10, self.update_running_timers)
+            self.root.after(50, self.update_running_timers)
 
     def update_participants_display(self):
         # Clear existing items
@@ -788,17 +816,22 @@ class RowingTimer:
             messagebox.showinfo(
                 "Resultater",
                 f"Resultater beregnet for {len(results)} færdige deltagere.",
+                parent=self.root
             )
         else:
             messagebox.showwarning(
-                "Ingen Resultater", "Ingen deltagere har gennemført begge ture."
+                "Ingen Resultater", 
+                "Ingen deltagere har gennemført begge ture.",
+                parent=self.root
             )
 
     def export_csv(self):
         """Export results to CSV file with user-selected filename"""
         if not self.results_tree.get_children():
             messagebox.showwarning(
-                "Ingen Resultater", "Beregn venligst resultater først."
+                "Ingen Resultater", 
+                "Beregn venligst resultater først.",
+                parent=self.root
             )
             return
 
@@ -860,7 +893,7 @@ class RowingTimer:
             try:
                 from reportlab.lib import colors
                 from reportlab.lib.enums import TA_CENTER, TA_LEFT
-                from reportlab.lib.pagesizes import A4, letter
+                from reportlab.lib.pagesizes import A4
                 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
                 from reportlab.lib.units import inch
                 from reportlab.platypus import (
@@ -960,7 +993,8 @@ class RowingTimer:
 
             for item in self.results_tree.get_children():
                 values = self.results_tree.item(item)["values"]
-                table_data.append(values)
+                if values:
+                    table_data.append(list(values))
 
             # Create table
             table = Table(
@@ -1029,7 +1063,7 @@ class RowingTimer:
                 )
 
                 summary_text = [
-                    f"<b>Konkurrence Sammendrag:</b>",
+                    "<b>Konkurrence Sammendrag:</b>",
                     f"• Antal Deltagere: {total_participants}",
                     f"• Vinder: {winner_name} (Mest Konsistent)",
                     f"• Vinder Konsistens Score: {winner_consistency}",
@@ -1065,7 +1099,15 @@ class RowingTimer:
             with open(self.data_file, "w") as f:
                 json.dump(self.participants, f, indent=2)
         except Exception as e:
-            print(f"Error saving data: {e}")
+            error_msg = f"Fejl ved gemning af data: {e}"
+            print(error_msg)
+            # Only show popup if root exists (might be during shutdown)
+            if hasattr(self, "root") and self.root:
+                messagebox.showerror(
+                    "Gemmer Fejl", 
+                    f"Kunne ikke gemme data!\n\nTjek filrettigheder.\n{e}",
+                    parent=self.root
+                )
 
     def load_data(self):
         try:

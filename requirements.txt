@@ -13,6 +13,12 @@ reportlab>=3.5.0     # PDF generation and formatting
 # Required for building executable:
 pyinstaller>=5.0.0   # Create standalone executable files
 
+# Platform-specific notes:
+# Windows: All dependencies install via pip
+# Linux: May need system packages:
+#   - sudo apt install python3-tk (for tkinter on Ubuntu/Mint)
+#   - sudo dnf install python3-tkinter (for tkinter on Fedora)
+
 # Optional enhancements you might consider:
 # matplotlib>=3.5.0  # For plotting time graphs
 # pandas>=1.3.0      # For advanced data analysis

@@ -120,6 +120,8 @@ def build_executable():
         "--add-data",
         "club_logo.txt;.",
         "--add-data",
+        "club_logo.png;.",
+        "--add-data",
         "README.md;.",
         "--add-data",
         "USER_GUIDE.md;.",
@@ -249,7 +251,7 @@ def create_distribution_package():
     print("   Copied executable")
 
     # Copy documentation
-    docs_to_copy = ["README.md", "USER_GUIDE.md", "IMPROVEMENTS.md", "club_logo.txt"]
+    docs_to_copy = ["README.md", "USER_GUIDE.md", "IMPROVEMENTS.md", "club_logo.txt", "club_logo.png"]
 
     for doc in docs_to_copy:
         if os.path.exists(doc):

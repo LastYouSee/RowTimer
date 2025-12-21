@@ -23,12 +23,25 @@ En Python GUI applikation til tidtagning af rokonkurrencer hvor deltagere gennem
 
 ## Krav / Requirements
 
+### For Executable Version (Recommended)
+- **Ingen krav** - Klar til brug direkte
+- Windows 10 eller nyere
+- Ca. 50 MB ledig plads
+
+### For Python Source Version
 - Python 3.6 eller højere / Python 3.6 or higher
 - **ReportLab** (til PDF eksport): `pip install reportlab`
 - Anden funktionalitet bruger kun Python standard bibliotek
 
-## Installation
+## Installation / Download
 
+### 📦 Executable Version (Lettest for Klubmedlemmer)
+1. Download `SkelskørRoklub_Timer_Installer_YYYYMMDD.zip`
+2. Udpak ZIP filen til en mappe
+3. Dobbeltklik på `SkelskørRoklub_Timer.exe`
+4. **FÆRDIG!** - Ingen yderligere installation påkrævet
+
+### 👨‍💻 Developer Version (Python Source)
 1. Klon eller download dette repository
 2. Installer afhængigheder for fuld funktionalitet:
    ```bash
@@ -37,12 +50,18 @@ En Python GUI applikation til tidtagning af rokonkurrencer hvor deltagere gennem
    Eller installer manuelt: `pip install reportlab`
 3. Grundlæggende funktionalitet virker uden yderligere afhængigheder
 
-*Clone or download this repository and install dependencies as shown above.*
+*The executable version is ready-to-use without Python installation. For developers, clone the repository as shown above.*
 
 ## Brug / Usage
 
 ### Start af Applikationen / Starting the Application
 
+#### Executable Version (Anbefalet)
+```
+Dobbeltklik på: SkelskørRoklub_Timer.exe
+```
+
+#### Python Source Version
 Kør applikationen med en af disse metoder:
 
 ```bash
@@ -107,16 +126,31 @@ python start_with_sample.py  # Med eksempel data / With sample data
 
 ## File Structure
 
+### Executable Distribution
+```
+SkelskørRoklub_Timer_Installer/
+├── SkelskørRoklub_Timer.exe    # 🚀 Main application (ready to run)
+├── INSTALLATION_GUIDE.txt      # Danish installation guide
+├── LÆSMIG_FØRST.txt            # Quick start guide
+├── README.md                   # This documentation
+├── USER_GUIDE.md               # Detailed user guide
+├── create_shortcut.bat         # Create desktop shortcut
+└── uninstall.bat               # Uninstaller script
+```
+
+### Source Code Structure
 ```
 RowTimer/
-├── rowing_timer.py      # Main application
-├── run_timer.py         # Launcher script
-├── requirements.txt     # Dependencies info
-├── install_dependencies.py # Dependency installer
-├── README.md           # This file
-├── rowing_data.json    # Generated data file
-├── rowing_results_*.csv # Generated CSV exports
-└── rowing_results_*.pdf # Generated PDF exports
+├── rowing_timer.py             # Main application
+├── build_executable.py         # Build standalone executable
+├── create_installer.py         # Create distribution package
+├── BUILD_INSTRUCTIONS.md       # How to build executable
+├── requirements.txt            # Dependencies info
+├── install_dependencies.py     # Dependency installer
+├── README.md                   # This file
+├── rowing_data.json            # Generated data file
+├── rowing_results_*.csv        # Generated CSV exports
+└── rowing_results_*.pdf        # Generated PDF exports
 ```
 
 ## Features in Detail
@@ -203,6 +237,25 @@ RowTimer/
 - 🌐 www.skelskoerroklub.dk
 
 *Skelskør Roklub is a Danish rowing club located in Skælskør focusing on fitness rowing, coastal, kayak, and sculling with training in beautiful surroundings.*
+
+## 💻 Building Executable
+
+For udviklere der vil bygge deres egen executable:
+
+```bash
+# Install PyInstaller
+pip install pyinstaller
+
+# Build executable
+python build_executable.py
+
+# Create installer package
+python create_installer.py
+```
+
+Se `BUILD_INSTRUCTIONS.md` for detaljerede instruktioner.
+
+*For developers wanting to build their own executable, see BUILD_INSTRUCTIONS.md for detailed instructions.*
 
 ## Bidrag / Contributing
 

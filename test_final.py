@@ -72,8 +72,8 @@ class FinalTester:
             self.app.results_tree.delete = MagicMock()
             self.app.results_tree.insert = MagicMock()
 
-            self.app.timer_display_frame = MagicMock()
-            self.app.timer_display_frame.winfo_children = MagicMock(return_value=[])
+            # self.app.timer_display_frame = MagicMock() # Removed in UI refactor
+            # self.app.timer_display_frame.winfo_children = MagicMock(return_value=[]) 
 
             self.app.boat_controls_inner_frame = MagicMock()
             self.app.boat_controls_inner_frame.winfo_children = MagicMock(
