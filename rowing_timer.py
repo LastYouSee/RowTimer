@@ -16,6 +16,12 @@ class RowingTimer:
 
         # Data storage
         self.participants = {}
+        self.event_info = {
+            "name": "",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "location": "Skælskør",
+            "description": ""
+        }
         self.current_timers = {}
         self.data_file = "rowing_data.json"
 
@@ -35,10 +41,6 @@ class RowingTimer:
         header_frame.pack(fill=tk.X, pady=(0, 10))
         header_frame.pack_propagate(False)
 
-        # Club header content frame (centered)
-        content_frame = tk.Frame(header_frame, bg="#1e3a8a")
-        content_frame.pack(expand=True)
-
         # Try to load logo
         try:
             # Check for local file or PyInstaller bundled file
@@ -49,7 +51,7 @@ class RowingTimer:
             if os.path.exists(logo_path):
                 self.logo_img = tk.PhotoImage(file=logo_path)
                 logo_label = tk.Label(
-                    content_frame, 
+                    header_frame, 
                     image=self.logo_img, 
                     bg="#1e3a8a"
                 )
@@ -57,14 +59,14 @@ class RowingTimer:
         except Exception as e:
             print(f"Could not load logo: {e}")
 
-        # Text frame
-        text_frame = tk.Frame(content_frame, bg="#1e3a8a")
-        text_frame.pack(side=tk.LEFT)
+        # Text frame - Centered securely
+        text_frame = tk.Frame(header_frame, bg="#1e3a8a")
+        text_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Club title
         title_label = tk.Label(
             text_frame,
-            text="🚣 SKELSKØR ROKLUB 🚣",
+            text="SKELSKØR ROKLUB",
             font=("Arial", 20, "bold"),
             fg="white",
             bg="#1e3a8a",
@@ -81,6 +83,11 @@ class RowingTimer:
         )
         subtitle_label.pack(pady=(0, 5))
 
+        # Event Tab
+        event_frame = ttk.Frame(notebook)
+        notebook.add(event_frame, text="📅 Begivenhed")
+        self.create_event_tab(event_frame)
+
         # Registration Tab
         reg_frame = ttk.Frame(notebook)
         notebook.add(reg_frame, text="📝 Tilmeldinger")
@@ -96,12 +103,61 @@ class RowingTimer:
         notebook.add(results_frame, text="🏆 Resultater")
         self.create_results_tab(results_frame)
 
+    def create_event_tab(self, parent):
+        # Event details form
+        frame = ttk.LabelFrame(parent, text="📅 Begivenhedsdetaljer", padding=20)
+        frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+
+        # Grid configuration
+        frame.columnconfigure(1, weight=1)
+
+        # Event Name
+        ttk.Label(frame, text="Begivenhedsnavn:", font=("Arial", 10)).grid(row=0, column=0, sticky=tk.W, pady=10)
+        self.event_name_var = tk.StringVar(value=self.event_info.get("name", ""))
+        ttk.Entry(frame, textvariable=self.event_name_var, font=("Arial", 10)).grid(row=0, column=1, sticky=tk.EW, padx=10)
+
+        # Date
+        ttk.Label(frame, text="Dato (YYYY-MM-DD):", font=("Arial", 10)).grid(row=1, column=0, sticky=tk.W, pady=10)
+        self.event_date_var = tk.StringVar(value=self.event_info.get("date", datetime.now().strftime("%Y-%m-%d")))
+        ttk.Entry(frame, textvariable=self.event_date_var, font=("Arial", 10)).grid(row=1, column=1, sticky=tk.EW, padx=10)
+
+        # Location
+        ttk.Label(frame, text="Lokation:", font=("Arial", 10)).grid(row=2, column=0, sticky=tk.W, pady=10)
+        self.event_location_var = tk.StringVar(value=self.event_info.get("location", "Skælskør"))
+        ttk.Entry(frame, textvariable=self.event_location_var, font=("Arial", 10)).grid(row=2, column=1, sticky=tk.EW, padx=10)
+
+        # Description
+        ttk.Label(frame, text="Beskrivelse/Noter:", font=("Arial", 10)).grid(row=3, column=0, sticky=tk.W, pady=10)
+        self.event_desc_text = tk.Text(frame, height=10, font=("Arial", 10))
+        self.event_desc_text.grid(row=3, column=1, sticky=tk.EW, padx=10)
+        self.event_desc_text.insert("1.0", self.event_info.get("description", ""))
+
+        # Save Button
+        search_btn_frame = ttk.Frame(frame)
+        search_btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
+        
+        ttk.Button(
+            search_btn_frame, 
+            text="💾 Gem Begivenhedsinfo", 
+            command=self.save_event_info_to_memory
+        ).pack(ipadx=10, ipady=5)
+
+    def save_event_info_to_memory(self):
+        """Update the internal event_info dictionary from GUI fields and save to file"""
+        self.event_info["name"] = self.event_name_var.get().strip()
+        self.event_info["date"] = self.event_date_var.get().strip()
+        self.event_info["location"] = self.event_location_var.get().strip()
+        self.event_info["description"] = self.event_desc_text.get("1.0", tk.END).strip()
+        
+        self.save_data()
+        messagebox.showinfo("Gemt", "Begivenhedsinformation er gemt.", parent=self.root)
+
     def create_registration_tab(self, parent):
         # Registration form
-        form_frame = ttk.LabelFrame(parent, text="🚣 Tilmeld Deltager", padding=10)
+        form_frame = ttk.LabelFrame(parent, text="🚣 Tilmeld deltager", padding=10)
         form_frame.pack(fill=tk.X, padx=10, pady=5)
 
-        ttk.Label(form_frame, text="Båd Nummer:").grid(
+        ttk.Label(form_frame, text="Båd nummer:").grid(
             row=0, column=0, sticky=tk.W, pady=2
         )
         self.boat_number_var = tk.StringVar()
@@ -109,7 +165,7 @@ class RowingTimer:
             row=0, column=1, sticky=tk.W, padx=(5, 20)
         )
 
-        ttk.Label(form_frame, text="Deltager Navn:").grid(
+        ttk.Label(form_frame, text="Deltager navn:").grid(
             row=0, column=2, sticky=tk.W, pady=2
         )
         self.participant_name_var = tk.StringVar()
@@ -122,7 +178,7 @@ class RowingTimer:
         ).grid(row=0, column=4, padx=10)
 
         # Participants list
-        list_frame = ttk.LabelFrame(parent, text="🚣 Tilmeldte Deltagere", padding=10)
+        list_frame = ttk.LabelFrame(parent, text="🚣 Deltagere", padding=10)
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
         # Treeview for participants
@@ -157,7 +213,7 @@ class RowingTimer:
 
     def create_timing_tab(self, parent):
         # Global run selection at the top
-        run_select_frame = ttk.LabelFrame(parent, text="🏁 Nuværende Tur", padding=10)
+        run_select_frame = ttk.LabelFrame(parent, text="🏁 Nuværende tur", padding=10)
         run_select_frame.pack(fill=tk.X, padx=10, pady=5)
 
         self.run_var = tk.StringVar(value="1")
@@ -183,7 +239,7 @@ class RowingTimer:
 
         # Boat controls section
         self.boat_controls_frame = ttk.LabelFrame(
-            parent, text="🚣 Båd Kontroller", padding=10
+            parent, text="🚣 Tidtagning", padding=10
         )
         self.boat_controls_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
@@ -213,6 +269,33 @@ class RowingTimer:
         self.boat_controls_canvas.pack(side="left", fill="both", expand=True)
         self.boat_controls_scrollbar.pack(side="right", fill="y")
 
+        # --- SCROLL FIX START ---
+        def _on_mousewheel(event):
+            self.boat_controls_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+        def _on_linux_scroll_up(event):
+            self.boat_controls_canvas.yview_scroll(-1, "units")
+
+        def _on_linux_scroll_down(event):
+            self.boat_controls_canvas.yview_scroll(1, "units")
+
+        def _bind_mousewheel(event):
+            # Windows
+            self.boat_controls_canvas.bind_all("<MouseWheel>", _on_mousewheel)
+            # Linux
+            self.boat_controls_canvas.bind_all("<Button-4>", _on_linux_scroll_up)
+            self.boat_controls_canvas.bind_all("<Button-5>", _on_linux_scroll_down)
+
+        def _unbind_mousewheel(event):
+            self.boat_controls_canvas.unbind_all("<MouseWheel>")
+            self.boat_controls_canvas.unbind_all("<Button-4>")
+            self.boat_controls_canvas.unbind_all("<Button-5>")
+
+        # Bind Enter/Leave events to the container frame
+        self.boat_controls_frame.bind("<Enter>", _bind_mousewheel)
+        self.boat_controls_frame.bind("<Leave>", _unbind_mousewheel)
+        # --- SCROLL FIX END ---
+
         # Note: Using tk.Button instead of ttk.Button for reliable color control
         # ttk buttons can have theme conflicts with custom colors
 
@@ -225,7 +308,7 @@ class RowingTimer:
     def create_results_tab(self, parent):
         # Results display
         results_frame = ttk.LabelFrame(
-            parent, text="🏆 Konkurrence Resultater", padding=10
+            parent, text="🏆 Konkurrence resultater", padding=10
         )
         results_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
@@ -244,7 +327,13 @@ class RowingTimer:
         )
 
         for col in columns:
-            self.results_tree.heading(col, text=col)
+            self.results_tree.heading(
+                col, 
+                text=col,
+                command=lambda _col=col: self.treeview_sort_column(
+                    self.results_tree, _col, False
+                )
+            )
             self.results_tree.column(col, width=100)
 
         # Scrollbar for results
@@ -262,7 +351,7 @@ class RowingTimer:
 
         ttk.Button(
             results_button_frame,
-            text="🧮 Beregn Resultater",
+            text="🧮 Beregn resultater",
             command=self.calculate_results,
         ).pack(side=tk.LEFT, padx=5)
         ttk.Button(
@@ -271,6 +360,54 @@ class RowingTimer:
         ttk.Button(
             results_button_frame, text="📄 Eksporter PDF", command=self.export_pdf
         ).pack(side=tk.LEFT, padx=5)
+
+    def treeview_sort_column(self, tv, col, reverse):
+        """Sort treeview content when header is clicked"""
+        l = [(tv.set(k, col), k) for k in tv.get_children('')]
+
+        def get_sort_key(val):
+            # Handle empty values
+            if val == "-" or val == "":
+                return float('inf')
+            
+            if col == "Plads":
+                try:
+                    return int(val)
+                except ValueError:
+                    return val
+            elif col == "Båd":
+                # Same logic as file sorting: (is_numeric, value)
+                # But here we want numeric first, so we use (0, int) for numbers and (1, str) for others
+                if val.isdigit():
+                    return (0, int(val))
+                else:
+                    return (1, val)
+            elif col in ("Forskel", "Konsistens Score"):
+                # Remove 's' if present
+                clean_val = val.replace('s', '').strip()
+                try:
+                    return float(clean_val)
+                except ValueError:
+                    return val
+            elif col in ("Tur 1", "Tur 2"):
+                # Times format MM:SS.mmm - alphanumeric sort works roughly okay
+                # but better to parse if possible, or just rely on the strict format
+                return val
+            else:
+                return val.lower()
+
+        try:
+            l.sort(key=lambda t: get_sort_key(t[0]), reverse=reverse)
+        except Exception as e:
+            print(f"Sort error: {e}")
+            # Fallback to string sort
+            l.sort(reverse=reverse)
+
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+
+        # Reverse sort next time
+        tv.heading(col, command=lambda: self.treeview_sort_column(tv, col, not reverse))
 
     def register_participant(self):
         boat_number = self.boat_number_var.get().strip()
@@ -524,7 +661,10 @@ class RowingTimer:
             self.participants_tree.delete(item)
 
         # Add participants
-        for boat_number, data in sorted(self.participants.items()):
+        for boat_number, data in sorted(
+            self.participants.items(),
+            key=lambda item: (int(item[0]) if item[0].isdigit() else float('inf'), item[0])
+        ):
             run1_display = (
                 self.format_time(data["run1_time"]) if data["run1_time"] else "-"
             )
@@ -588,7 +728,10 @@ class RowingTimer:
         )
 
         # Create controls for each boat
-        for i, (boat, data) in enumerate(sorted(self.participants.items())):
+        for i, (boat, data) in enumerate(sorted(
+            self.participants.items(),
+            key=lambda item: (int(item[0]) if item[0].isdigit() else float('inf'), item[0])
+        )):
             self._create_boat_control_row(boat, data, run)
 
     def _create_boat_control_row(self, boat, data, run):
@@ -853,6 +996,18 @@ class RowingTimer:
             with open(filename, "w", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
 
+                # Event Info
+                if self.event_info["name"]:
+                    writer.writerow(["Begivenhed:", self.event_info["name"]])
+                if self.event_info["date"]:
+                    writer.writerow(["Dato:", self.event_info["date"]])
+                if self.event_info["location"]:
+                    writer.writerow(["Lokation:", self.event_info["location"]])
+                if self.event_info["description"]:
+                    writer.writerow(["Beskrivelse:", self.event_info["description"].replace("\n", " ")])
+                
+                writer.writerow([]) # Empty line
+
                 # Header
                 writer.writerow(
                     [
@@ -862,7 +1017,7 @@ class RowingTimer:
                         "Tur 1",
                         "Tur 2",
                         "Forskel",
-                        "Konsistens Score",
+                        "Score",
                     ]
                 )
 
@@ -964,18 +1119,25 @@ class RowingTimer:
             club_header = Paragraph("🚣 SKELSKØR ROKLUB 🚣", title_style)
             elements.append(club_header)
 
-            # Title
-            title_text = "Ro Konkurrence Resultater"
-            title = Paragraph(title_text, title_style)
-            elements.append(title)
+            elements.append(Spacer(1, 20))
 
             # Event details
-            event_info = (
-                f"Genereret den {datetime.now().strftime('%d. %B %Y kl. %H:%M')}<br/>"
-                f"Gammelgade 25, 4230 Skælskør • www.skelskoerroklub.dk"
-            )
-            subtitle = Paragraph(event_info, subtitle_style)
+            event_name = self.event_info.get("name") or "Ro Konkurrence Resultater"
+            title = Paragraph(event_name, title_style)
+            elements.append(title)
+
+            # Metadata
+            date_str = self.event_info.get("date") or datetime.now().strftime('%d. %B %Y')
+            loc_str = self.event_info.get("location") or "Skælskør"
+            
+            meta_info = f"{date_str} • {loc_str}"
+            subtitle = Paragraph(meta_info, subtitle_style)
             elements.append(subtitle)
+
+            if self.event_info.get("description"):
+                desc = Paragraph(self.event_info["description"], subtitle_style)
+                elements.append(desc)
+
             elements.append(Spacer(1, 20))
 
             # Prepare table data
@@ -1096,8 +1258,12 @@ class RowingTimer:
 
     def save_data(self):
         try:
-            with open(self.data_file, "w") as f:
-                json.dump(self.participants, f, indent=2)
+            data_to_save = {
+                "event_info": self.event_info,
+                "participants": self.participants
+            }
+            with open(self.data_file, "w", encoding="utf-8") as f:
+                json.dump(data_to_save, f, indent=2)
         except Exception as e:
             error_msg = f"Fejl ved gemning af data: {e}"
             print(error_msg)
@@ -1112,8 +1278,17 @@ class RowingTimer:
     def load_data(self):
         try:
             if os.path.exists(self.data_file):
-                with open(self.data_file, "r") as f:
-                    self.participants = json.load(f)
+                with open(self.data_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    
+                    # check if new format (has "participants" key)
+                    if "participants" in data:
+                        self.participants = data["participants"]
+                        self.event_info = data.get("event_info", self.event_info)
+                    else:
+                        # Legacy format - migration
+                        self.participants = data
+                        # Keep default event info
         except Exception as e:
             print(f"Error loading data: {e}")
             self.participants = {}

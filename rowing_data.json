@@ -1,58 +1,220 @@
 {
-  "1": {
-    "name": "frewgfre",
-    "run1_time": 10.360867261886597,
-    "run2_time": null,
-    "run1_start": 1766331381.5020807,
-    "run2_start": null
+  "event_info": {
+    "name": "Påligedlighedssejlads",
+    "date": "2026-01-03",
+    "location": "Skælskør",
+    "description": "Dette er en beskrivlese af påligelighedssejlads."
   },
-  "3": {
-    "name": "greg",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
-  },
-  "2": {
-    "name": "fasfs",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
-  },
-  "4": {
-    "name": "greg",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
-  },
-  "5": {
-    "name": "rge",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
-  },
-  "6": {
-    "name": "hrthrt",
-    "run1_time": 5.2667951583862305,
-    "run2_time": null,
-    "run1_start": 1766331408.0498374,
-    "run2_start": null
-  },
-  "7": {
-    "name": "htrh",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
-  },
-  "8": {
-    "name": "htrh",
-    "run1_time": null,
-    "run2_time": null,
-    "run1_start": null,
-    "run2_start": null
+  "participants": {
+    "1": {
+      "name": "Emma Hansen",
+      "run1_time": 2.769984722137451,
+      "run2_time": 1.5707027912139893,
+      "run1_start": 1766412671.9082494,
+      "run2_start": 1767433919.7644954
+    },
+    "2": {
+      "name": "Oliver Nielsen",
+      "run1_time": 0.31183362007141113,
+      "run2_time": 1.3249080181121826,
+      "run1_start": 1766412156.6662195,
+      "run2_start": 1767433921.839363
+    },
+    "3": {
+      "name": "Sofia Jensen",
+      "run1_time": 0.7400360107421875,
+      "run2_time": 0.9879410266876221,
+      "run1_start": 1767433898.1040838,
+      "run2_start": 1767433934.9079545
+    },
+    "4": {
+      "name": "William Pedersen",
+      "run1_time": 0.6142263412475586,
+      "run2_time": 0.9919445514678955,
+      "run1_start": 1767433899.2159452,
+      "run2_start": 1767433936.3439715
+    },
+    "5": {
+      "name": "Ida Andersen",
+      "run1_time": 0.698815107345581,
+      "run2_time": 0.7138118743896484,
+      "run1_start": 1767433900.2112541,
+      "run2_start": 1767433937.7741823
+    },
+    "6": {
+      "name": "Frederik Christensen",
+      "run1_time": 0.7447707653045654,
+      "run2_time": 0.9148812294006348,
+      "run1_start": 1767433901.280126,
+      "run2_start": 1767433938.8689692
+    },
+    "7": {
+      "name": "Clara Larsen",
+      "run1_time": 0.7369322776794434,
+      "run2_time": 0.8006043434143066,
+      "run1_start": 1767433902.4859834,
+      "run2_start": 1767433940.2501981
+    },
+    "8": {
+      "name": "Emil Sørensen",
+      "run1_time": 1.28605055809021,
+      "run2_time": 0.8570218086242676,
+      "run1_start": 1767433903.6699932,
+      "run2_start": 1767433941.5669694
+    },
+    "9": {
+      "name": "Anna Rasmussen",
+      "run1_time": 0.671846866607666,
+      "run2_time": 0.8359682559967041,
+      "run1_start": 1767433905.4221678,
+      "run2_start": 1767433942.8439946
+    },
+    "10": {
+      "name": "Noah Jørgensen",
+      "run1_time": 2.6354141235351562,
+      "run2_time": 1.2170941829681396,
+      "run1_start": 1766412496.687215,
+      "run2_start": 1767433948.394805
+    },
+    "11": {
+      "name": "Ella Petersen",
+      "run1_time": 0.26250195503234863,
+      "run2_time": 0.9961268901824951,
+      "run1_start": 1766412150.8746696,
+      "run2_start": 1767433950.392695
+    },
+    "12": {
+      "name": "Lucas Madsen",
+      "run1_time": 1.6066811084747314,
+      "run2_time": 0.9647502899169922,
+      "run1_start": 1766412511.3212318,
+      "run2_start": 1767433951.8619058
+    },
+    "13": {
+      "name": "Alma Kristensen",
+      "run1_time": 1.3288261890411377,
+      "run2_time": 1.1569452285766602,
+      "run1_start": 1766412516.067067,
+      "run2_start": 1767433953.2227924
+    },
+    "14": {
+      "name": "Victor Olsen",
+      "run1_time": 0.2659473419189453,
+      "run2_time": 0.6754717826843262,
+      "run1_start": 1766412152.8535626,
+      "run2_start": 1767433955.5291672
+    },
+    "15": {
+      "name": "Karla Thomsen",
+      "run1_time": 0.26511120796203613,
+      "run2_time": 0.6623015403747559,
+      "run1_start": 1766412153.4184992,
+      "run2_start": 1767433956.7104208
+    },
+    "16": {
+      "name": "Oscar Christiansen",
+      "run1_time": 0.6989631652832031,
+      "run2_time": 0.8189969062805176,
+      "run1_start": 1766412521.8998137,
+      "run2_start": 1767433957.7985952
+    },
+    "17": {
+      "name": "Olivia Poulsen",
+      "run1_time": 0.26659202575683594,
+      "run2_time": 1.227987289428711,
+      "run1_start": 1766412154.6442716,
+      "run2_start": 1767433960.9365568
+    },
+    "18": {
+      "name": "Alfred Johansen",
+      "run1_time": 0.3079342842102051,
+      "run2_time": 1.2336292266845703,
+      "run1_start": 1766412155.2712507,
+      "run2_start": 1767433962.638788
+    },
+    "19": {
+      "name": "Lærke Møller",
+      "run1_time": 0.2778310775756836,
+      "run2_time": 0.521984338760376,
+      "run1_start": 1766412155.990279,
+      "run2_start": 1767433992.6977026
+    },
+    "20": {
+      "name": "Anton Mortensen",
+      "run1_time": 0.4419546127319336,
+      "run2_time": 0.40479493141174316,
+      "run1_start": 1766412158.8500454,
+      "run2_start": 1767433993.591853
+    },
+    "21": {
+      "name": "Agnes Knudsen",
+      "run1_time": 0.3771650791168213,
+      "run2_time": 0.39475178718566895,
+      "run1_start": 1766412161.9868915,
+      "run2_start": 1767433994.4096265
+    },
+    "22": {
+      "name": "Magnus Jakobsen",
+      "run1_time": 0.35533738136291504,
+      "run2_time": 0.370898962020874,
+      "run1_start": 1766412162.8621492,
+      "run2_start": 1767433995.1707032
+    },
+    "23": {
+      "name": "Maja Jacobsen",
+      "run1_time": 0.264620304107666,
+      "run2_time": 1.1210997104644775,
+      "run1_start": 1766412163.5563364,
+      "run2_start": 1767434182.2746584
+    },
+    "24": {
+      "name": "Elias Clausen",
+      "run1_time": 0.28039026260375977,
+      "run2_time": 0.42819809913635254,
+      "run1_start": 1766412164.209953,
+      "run2_start": 1767434184.2955697
+    },
+    "25": {
+      "name": "Nora Eriksen",
+      "run1_time": 0.31276631355285645,
+      "run2_time": 0.5957427024841309,
+      "run1_start": 1766412164.867143,
+      "run2_start": 1767434185.1447873
+    },
+    "26": {
+      "name": "August Mogensen",
+      "run1_time": 0.27658510208129883,
+      "run2_time": 0.5878736972808838,
+      "run1_start": 1766412166.806247,
+      "run2_start": 1767434186.1407158
+    },
+    "27": {
+      "name": "Lilly Olesen",
+      "run1_time": 0.7839016914367676,
+      "run2_time": 0.5761623382568359,
+      "run1_start": 1766412165.6128864,
+      "run2_start": 1767434187.1016247
+    },
+    "28": {
+      "name": "Felix Henriksen",
+      "run1_time": 1.065697431564331,
+      "run2_time": 0.547067403793335,
+      "run1_start": 1767433909.1187966,
+      "run2_start": 1767434188.1105943
+    },
+    "29": {
+      "name": "Vigga Lund",
+      "run1_time": 1.2819178104400635,
+      "run2_time": 0.3939542770385742,
+      "run1_start": 1767433910.7945545,
+      "run2_start": 1767434188.9975214
+    },
+    "30": {
+      "name": "Johan Holm",
+      "run1_time": 1.2620375156402588,
+      "run2_time": 0.466949462890625,
+      "run1_start": 1767433912.572463,
+      "run2_start": 1767434189.7846708
+    }
   }
 }
