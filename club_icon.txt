@@ -1,0 +1,5 @@
+
+    🚣 Skelskør Roklub Timer Icon Placeholder
+    This file serves as a reference for the executable icon.
+    For best results, replace with a proper .ico file.
+    

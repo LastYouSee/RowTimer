@@ -1,0 +1,40 @@
+
+🚣 SKELSKØR ROKLUB - RO KONKURRENCE TIMER 🚣
+
+INSTALLATION OG BRUG:
+═══════════════════════════════════════════════════════════════
+
+📁 FILER I DENNE PAKKE:
+• SkelskørRoklub_Timer.exe - Hoved applikationen
+• README.md - Generel information og funktioner
+• USER_GUIDE.md - Detaljeret bruger guide
+• IMPROVEMENTS.md - Tekniske forbedringer og funktioner
+• club_logo.txt - Klubbens logo og information
+
+🚀 SÅDAN STARTER DU PROGRAMMET:
+1. Dobbeltklik på "SkelskørRoklub_Timer.exe"
+2. Programmet starter med Skelskør Roklub branding
+3. Ingen installation nødvendig - kører direkte
+
+📋 SYSTEMKRAV:
+• Windows 10 eller nyere
+• Ingen yderligere software krævet
+• Cirka 50 MB ledig plads
+
+🎯 FUNKTIONER:
+✅ Dansk interface tilpasset Skelskør Roklub
+✅ Individuelle båd kontroller for hurtig tidtagning
+✅ Samtidige timer for flere både
+✅ CSV og PDF eksport af resultater
+✅ Automatisk gem og hent af data
+✅ Professionel rangering baseret på konsistens
+
+📞 SUPPORT:
+Skelskør Roklub
+Gammelgade 25, 4230 Skælskør
+Tel: +45 40 73 16 60
+Web: www.skelskoerroklub.dk
+
+═══════════════════════════════════════════════════════════════
+© 2024 Skelskør Roklub - Sammen på vandet, sammen i fællesskabet
+═══════════════════════════════════════════════════════════════
